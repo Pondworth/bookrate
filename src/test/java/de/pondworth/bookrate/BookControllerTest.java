@@ -27,7 +27,7 @@ public class BookControllerTest {
     @Test
     void shouldReturnListOfBooks() throws Exception {
         // Mock-Daten vorbereiten
-        Book book = new Book("Testbuch", "Testautor", 5, "Sehr gut!");
+        Book book = new Book("Testbuch", "Testautor", 5, "Sehr gut!", "Roman", "Will noch lesen");
         Mockito.when(bookRepository.findAll()).thenReturn(List.of(book));
 
         // Test ausführen
@@ -37,5 +37,16 @@ public class BookControllerTest {
                 .andExpect(jsonPath("$[0].author").value("Testautor"))
                 .andExpect(jsonPath("$[0].rating").value(5))
                 .andExpect(jsonPath("$[0].comment").value("Sehr gut!"));
+    }
+
+    @Test
+    void shouldFilterBooksByGenre() throws Exception {
+        Book book = new Book("Testbuch", "Autor", 5, "Kommentar", "Roman", "Gelesen");
+        Mockito.when(bookRepository.findByGenre("Roman")).thenReturn(List.of(book));
+
+        mockMvc.perform(get("/api/books").param("genre", "Roman"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$[0].title").value("Testbuch"))
+                .andExpect(jsonPath("$[0].genre").value("Roman"));
     }
 }

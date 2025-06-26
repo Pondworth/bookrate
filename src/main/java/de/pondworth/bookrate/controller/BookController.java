@@ -21,9 +21,16 @@ public class BookController {
 
     // 📘 1. Alle Bücher anzeigen oder nach Rating filtern
     @GetMapping
-    public List<Book> getAllBooks(@RequestParam(required = false) Integer rating) {
-        if (rating != null) {
+    public List<Book> getAllBooks(
+            @RequestParam(required = false) Integer rating,
+            @RequestParam(required = false) String genre
+    ) {
+        if (rating != null && genre != null) {
+            return bookRepository.findByRatingAndGenre(rating, genre);
+        } else if (rating != null) {
             return bookRepository.findByRating(rating);
+        } else if (genre != null) {
+            return bookRepository.findByGenre(genre);
         } else {
             return bookRepository.findAll();
         }
@@ -52,6 +59,8 @@ public class BookController {
                     book.setAuthor(updatedBook.getAuthor());
                     book.setRating(updatedBook.getRating());
                     book.setComment(updatedBook.getComment());
+                    book.setGenre(updatedBook.getGenre());
+                    book.setStatus(updatedBook.getStatus());
                     bookRepository.save(book);
                     return ResponseEntity.ok(book);
                 })
@@ -73,5 +82,20 @@ public class BookController {
     @GetMapping("/search")
     public List<Book> searchBooks(@RequestParam String query) {
         return bookRepository.searchByTitleOrAuthor(query);
+    }
+
+    // 7. Filtern nach Genre / Status
+    @GetMapping("/filter")
+    public List<Book> filterBooks(@RequestParam(required = false) String genre,
+                                  @RequestParam(required = false) String status) {
+        if (genre != null && status != null) {
+            return bookRepository.findByGenreAndStatus(genre, status);
+        } else if (genre != null) {
+            return bookRepository.findByGenre(genre);
+        } else if (status != null) {
+            return bookRepository.findByStatus(status);
+        } else {
+            return bookRepository.findAll();
+        }
     }
 }

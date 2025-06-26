@@ -8,21 +8,24 @@ public class Book {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
     private String title;
     private String author;
     private int rating; // 1 bis 5 Sterne
-    private String comment;
+    private String comment; //kleiner Bewertungskommentar
+    private String genre = "Unbekannt"; // 🟡 Standardwert gesetzt
+    private String status = "Unbekannt"; // 🟡 Standardwert gesetzt
 
     // Leerer Konstruktor für JPA
     public Book() {}
 
     // Konstruktor mit allen Feldern
-    public Book(String title, String author, int rating, String comment) {
+    public Book(String title, String author, int rating, String comment, String genre, String status) {
         this.title = title;
         this.author = author;
         this.rating = rating;
         this.comment = comment;
+        this.genre = genre;
+        this.status = status;
     }
 
     // Getter & Setter
@@ -40,4 +43,21 @@ public class Book {
 
     public String getComment() { return comment; }
     public void setComment(String comment) { this.comment = comment; }
+
+    public String getGenre() {
+        return genre;
+    }
+
+    public void setGenre(String genre) {
+        this.genre = genre;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
 }
