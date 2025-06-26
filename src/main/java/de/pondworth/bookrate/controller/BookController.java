@@ -10,7 +10,7 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/books")
-@CrossOrigin // erlaubt dir, z. B. später mit einem Frontend darauf zuzugreifen
+@CrossOrigin
 public class BookController {
 
     private final BookRepository bookRepository;
@@ -19,10 +19,14 @@ public class BookController {
         this.bookRepository = bookRepository;
     }
 
-    // 📘 1. Alle Bücher anzeigen
+    // 📘 1. Alle Bücher anzeigen oder nach Rating filtern
     @GetMapping
-    public List<Book> getAllBooks() {
-        return bookRepository.findAll();
+    public List<Book> getAllBooks(@RequestParam(required = false) Integer rating) {
+        if (rating != null) {
+            return bookRepository.findByRating(rating);
+        } else {
+            return bookRepository.findAll();
+        }
     }
 
     // 📘 2. Buch nach ID anzeigen
@@ -63,5 +67,11 @@ public class BookController {
         } else {
             return ResponseEntity.notFound().build();
         }
+    }
+
+    // 🔍 6. Suche nach Titel oder Autor
+    @GetMapping("/search")
+    public List<Book> searchBooks(@RequestParam String query) {
+        return bookRepository.searchByTitleOrAuthor(query);
     }
 }

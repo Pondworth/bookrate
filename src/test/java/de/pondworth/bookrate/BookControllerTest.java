@@ -1,5 +1,6 @@
-package de.pondworth.bookrate.controller;
+package de.pondworth.bookrate;
 
+import de.pondworth.bookrate.controller.BookController;
 import de.pondworth.bookrate.model.Book;
 import de.pondworth.bookrate.repository.BookRepository;
 import org.junit.jupiter.api.Test;
