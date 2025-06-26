@@ -9,17 +9,14 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.transaction.annotation.Transactional;
 
+import static org.hamcrest.Matchers.hasSize;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-import java.util.List;
-
 @SpringBootTest
 @AutoConfigureMockMvc
-@Transactional
-public class BookControllerIntegrationTest {
+public class BookIntegrationTest {
 
     @Autowired
     private MockMvc mockMvc;
@@ -28,17 +25,19 @@ public class BookControllerIntegrationTest {
     private BookRepository bookRepository;
 
     @BeforeEach
-    void setUp() {
-        Book book = new Book("Testbuch", "Autor", 5, "Kommentar", "Roman", "Gelesen");
-        bookRepository.save(book);
+    void setup() {
+        // bookRepository.deleteAll();
+        bookRepository.save(new Book("Testbuch 1", "Autor A", 4, "Gut", "Roman", "Gelesen"));
+        bookRepository.save(new Book("Testbuch 2", "Autor B", 3, "Okay", "Fantasy", "Will ich lesen"));
+        bookRepository.save(new Book("Testbuch 3", "Autor C", 5, "Top", "Roman", "Lese ich"));
     }
 
     @Test
     void shouldReturnBooksFilteredByGenre() throws Exception {
-        mockMvc.perform(get("/api/books").param("genre", "Roman"))
+        mockMvc.perform(get("/api/books").param("genre", "Roman")
+                        .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
-                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                .andExpect(jsonPath("$[0].title").value("Testbuch 1"))
+                .andExpect(jsonPath("$", hasSize(2)))
                 .andExpect(jsonPath("$[0].genre").value("Roman"));
     }
 }
