@@ -578,13 +578,10 @@ Vielen Dank an:
 ## 📸 Screenshots
 
 ### Frontend - Hauptseite
-![Hauptseite](docs/screenshot-main.png)
+![Hauptseite](pics/frontend.png)
 
 ### Frontend - Buch hinzufügen
-![Modal](docs/screenshot-modal.png)
-
-### Backend - Swagger API
-![Swagger](docs/screenshot-swagger.png)
+![Modal](pics/addbook.png)
 
 ---
 
