@@ -26,7 +26,7 @@ public class BookIntegrationTest {
 
     @BeforeEach
     void setup() {
-        // bookRepository.deleteAll();
+        bookRepository.deleteAll();  // ✅ Datenbank vor jedem Test aufräumen!
         bookRepository.save(new Book("Testbuch 1", "Autor A", 4, "Gut", "Roman", "Gelesen"));
         bookRepository.save(new Book("Testbuch 2", "Autor B", 3, "Okay", "Fantasy", "Will ich lesen"));
         bookRepository.save(new Book("Testbuch 3", "Autor C", 5, "Top", "Roman", "Lese ich"));
